@@ -1,7 +1,7 @@
 #include <unistd.h>
  
 #include <signal.h>
-//引入头文件 author：hh
+
 #include <stdlib.h>
 #include <stdio.h>
 
