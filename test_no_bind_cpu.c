@@ -272,7 +272,7 @@ void sig_handler(int signo)
 			    clock_gettime(CLOCK_MONOTONIC, &tm_ended);  //Get the monotonic time at the end of the thread	author：hh
 				printf("starttime:sec:%lld,nsec:%lld\n",tm_start.tv_sec,tm_start.tv_nsec);  //   author：hh
 				printf("endtime:sec:%lld,nsec:%lld\n",tm_ended.tv_sec,tm_ended.tv_nsec);    //   author：hh
-			    printf("running time:%lld\n",(tm_ended.tv_sec-tm_start.tv_sec)*1000000000+tm_ended.tv_nsec-tm_start.tv_nsec);    //输出详细运行时间  author：hh
+			    printf("running time:%lld\n",(tm_ended.tv_sec-tm_start.tv_sec)*1000000000+tm_ended.tv_nsec-tm_start.tv_nsec);    //Output detailed run time  author：hh
                 exit(0);
         }
 }
