@@ -1,2 +1,2 @@
 # test_no_bind
-第一次测试不绑核性能测试
+The first test does not bind the core performance test.
