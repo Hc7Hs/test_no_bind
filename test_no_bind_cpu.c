@@ -30,7 +30,7 @@ int thread_stop=0;
 //#include "tony_misc.c"
 #include "nop_delay.h"
 #ifndef __CYGWIN__
-//因为作为头文件引入报错，故将tony_misc.c直接引入  author：hh
+//Because the error is introduced as a header file, tony_misc.c is introduced directly		author：hh
 #include <sys/syscall.h>
 
 pid_t gettid(void)
@@ -43,7 +43,9 @@ pid_t gettid(void)
 
 #endif
 
-void nsleep(double seconds, _Bool sleep_with_abs_time) // 参数类型由"bool"改为_Bool类型，原因：C99类型编译不通过
+void nsleep(double seconds, _Bool sleep_with_abs_time)
+// The parameter type was changed from "bool" to _Bool type. Reason: C99 type compilation failed. 	author：hh
+
 
 {
 
@@ -267,9 +269,9 @@ void sig_handler(int signo)
         if (signo == SIGINT)
         {
                 printf("\nlock_counter=%ld\n", lock_counter);
-			    clock_gettime(CLOCK_MONOTONIC, &tm_ended);  //获取线程结束的单调时间
-				printf("starttime:sec:%lld,nsec:%lld\n",tm_start.tv_sec,tm_start.tv_nsec);  //输出线程开始的单调时间   author：hh
-				printf("endtime:sec:%lld,nsec:%lld\n",tm_ended.tv_sec,tm_ended.tv_nsec);    //输出线程结束的单调时间   author：hh
+			    clock_gettime(CLOCK_MONOTONIC, &tm_ended);  //Get the monotonic time at the end of the thread	author：hh
+				printf("starttime:sec:%lld,nsec:%lld\n",tm_start.tv_sec,tm_start.tv_nsec);  //   author：hh
+				printf("endtime:sec:%lld,nsec:%lld\n",tm_ended.tv_sec,tm_ended.tv_nsec);    //   author：hh
 			    printf("running time:%lld\n",(tm_ended.tv_sec-tm_start.tv_sec)*1000000000+tm_ended.tv_nsec-tm_start.tv_nsec);    //输出详细运行时间  author：hh
                 exit(0);
         }
@@ -300,7 +302,6 @@ int main(int argc, char *argv[])
         int exe_duration = atoi(argv[1]);
         nr_parallel_threads = atoi(argv[2]);
         int lock_delay=atoi(argv[3]);
-	    //printf("first:e=%d,t=%d,l=%d\n",exe_duration,nr_parallel_threads,lock_delay);    //测试语句
 	    if (signal(SIGINT, sig_handler) == SIG_ERR)
         {
                 printf("failed to install signal handler\n");
@@ -319,14 +320,13 @@ int main(int argc, char *argv[])
         pthread_barrier_init(&global_barrier, NULL, nr_parallel_threads);
  
         pthread_t *thread_list = (pthread_t *)malloc(sizeof(pthread_t) * nr_parallel_threads);
-		//printf("second\n");   // 测试语句
         if (thread_list == NULL) {
                 perror("malloc");
                 exit(EXIT_FAILURE);
         }
 
         /*struct timespec tm_start;
-        struct timespec tm_ended;*/    //此处升级为全局变量，挪到前面  author：hh
+        struct timespec tm_ended;*/    //Move to the front to Upgrade to a global variable here.  	author:hh
         struct thread_data*  thread_param =
                 (struct thread_data*) calloc (nr_parallel_threads, sizeof(struct thread_data));
  
@@ -343,7 +343,7 @@ int main(int argc, char *argv[])
                 pthread_create(&thread_list[i], NULL, thread_routine, thread_param+i);
         }
         //printf("third\n");
-        nsleep(exe_duration, 0);   //初始第二个false参数编译不通过，故改为0 author：hh
+        nsleep(exe_duration, 0);   //The initial second false parameter is not compiled, so it is changed to 0 		author:hh
         // notify all threads stop and exit
         thread_stop = 1;
  
@@ -359,19 +359,15 @@ int main(int argc, char *argv[])
         printf("argv[0]:%s,exe_duration:%d,\tnr_parallel_threads:%d,lock_delay:%d,rate:%.0f,\t\t", argv[0], exe_duration,
                 nr_parallel_threads, lock_delay,
                 1.0 * lock_counter / exe_duration);
- 		//printf("running time:%lld\n",(tm_ended.tv_sec-tm_start.tv_sec)+(tm_ended.tv_nsec-tm_start.tv_nsec)/1000000000.0);
-		/*printf("running time:%lld\n",(tm_ended.tv_sec-tm_start.tv_sec)*1000000000+tm_ended.tv_nsec-tm_start.tv_nsec);
-		printf("starttime:sec:%lld,nsec:%lld\n",tm_start.tv_sec,tm_start.tv_nsec);
-		printf("endtime:sec:%lld,nsec:%lld\n",tm_ended.tv_sec,tm_ended.tv_nsec);
-		printf("ptread in:lock_counter=%ld\n", lock_counter);*/   //调试语句
+
         for( i = 0; i < nr_parallel_threads; ++i) {
                 if (i != nr_parallel_threads - 1)
                 {
-                        printf("true %lld, ", thread_param[i].lock_times); //加入标识以区别 author：hh
+                        printf("true %lld, ", thread_param[i].lock_times); //Add a logo to distinguish 		author:hh
                 }
                 else
                 {
-                        printf("false %lld \n", thread_param[i].lock_times); ////加入标识以区别 author：hh
+                        printf("false %lld \n", thread_param[i].lock_times); 
                 }
         }
  
